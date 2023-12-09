@@ -1,4 +1,4 @@
-module encore.app
+module github.com/dsha256/feesapi
 
 go 1.21.5
 

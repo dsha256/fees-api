@@ -1,1 +1,7 @@
+# JetBrains
+.idea
+
+# encore
 /.encore
+encore.gen.go
+encore.gen.cue
