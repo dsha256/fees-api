@@ -1,6 +1,6 @@
 -- create "bills" table
 CREATE TABLE "bills" (
-  "id" uuid NOT NULL,
+  "id" character varying NOT NULL,
   "currency" character varying NOT NULL DEFAULT 'USD',
   "total" bigint NOT NULL DEFAULT 0,
   "is_open" boolean NOT NULL DEFAULT true,
@@ -15,7 +15,7 @@ CREATE TABLE "line_items" (
   "price" bigint NOT NULL,
   "quantity" bigint NOT NULL,
   "added_at" timestamptz NOT NULL,
-  "bill_line_items" uuid NULL,
+  "bill_line_items" character varying NULL,
   PRIMARY KEY ("id"),
   CONSTRAINT "line_items_bills_line_items" FOREIGN KEY ("bill_line_items") REFERENCES "bills" ("id") ON UPDATE NO ACTION ON DELETE SET NULL
 );

@@ -269,7 +269,7 @@ func (c *BillClient) UpdateOne(b *Bill) *BillUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *BillClient) UpdateOneID(id uuid.UUID) *BillUpdateOne {
+func (c *BillClient) UpdateOneID(id string) *BillUpdateOne {
 	mutation := newBillMutation(c.config, OpUpdateOne, withBillID(id))
 	return &BillUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -286,7 +286,7 @@ func (c *BillClient) DeleteOne(b *Bill) *BillDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *BillClient) DeleteOneID(id uuid.UUID) *BillDeleteOne {
+func (c *BillClient) DeleteOneID(id string) *BillDeleteOne {
 	builder := c.Delete().Where(bill.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -303,12 +303,12 @@ func (c *BillClient) Query() *BillQuery {
 }
 
 // Get returns a Bill entity by its id.
-func (c *BillClient) Get(ctx context.Context, id uuid.UUID) (*Bill, error) {
+func (c *BillClient) Get(ctx context.Context, id string) (*Bill, error) {
 	return c.Query().Where(bill.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *BillClient) GetX(ctx context.Context, id uuid.UUID) *Bill {
+func (c *BillClient) GetX(ctx context.Context, id string) *Bill {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

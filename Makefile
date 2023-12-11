@@ -19,4 +19,4 @@ help: ## Prints this message.
 	sort | \
 	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: build help ent-init encore-conn-uri
+.PHONY: build help ent-init encore-conn-uri encore-run

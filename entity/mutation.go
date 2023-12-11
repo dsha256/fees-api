@@ -35,7 +35,7 @@ type BillMutation struct {
 	config
 	op                Op
 	typ               string
-	id                *uuid.UUID
+	id                *string
 	currency          *bill.Currency
 	total             *int64
 	addtotal          *int64
@@ -71,7 +71,7 @@ func newBillMutation(c config, op Op, opts ...billOption) *BillMutation {
 }
 
 // withBillID sets the ID field of the mutation.
-func withBillID(id uuid.UUID) billOption {
+func withBillID(id string) billOption {
 	return func(m *BillMutation) {
 		var (
 			err   error
@@ -123,13 +123,13 @@ func (m BillMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Bill entities.
-func (m *BillMutation) SetID(id uuid.UUID) {
+func (m *BillMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *BillMutation) ID() (id uuid.UUID, exists bool) {
+func (m *BillMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -140,12 +140,12 @@ func (m *BillMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *BillMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *BillMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -720,7 +720,7 @@ type LineItemMutation struct {
 	addquantity   *int64
 	added_at      *time.Time
 	clearedFields map[string]struct{}
-	owner         *uuid.UUID
+	owner         *string
 	clearedowner  bool
 	done          bool
 	oldValue      func(context.Context) (*LineItem, error)
@@ -1016,7 +1016,7 @@ func (m *LineItemMutation) ResetAddedAt() {
 }
 
 // SetOwnerID sets the "owner" edge to the Bill entity by id.
-func (m *LineItemMutation) SetOwnerID(id uuid.UUID) {
+func (m *LineItemMutation) SetOwnerID(id string) {
 	m.owner = &id
 }
 
@@ -1031,7 +1031,7 @@ func (m *LineItemMutation) OwnerCleared() bool {
 }
 
 // OwnerID returns the "owner" edge ID in the mutation.
-func (m *LineItemMutation) OwnerID() (id uuid.UUID, exists bool) {
+func (m *LineItemMutation) OwnerID() (id string, exists bool) {
 	if m.owner != nil {
 		return *m.owner, true
 	}
@@ -1041,7 +1041,7 @@ func (m *LineItemMutation) OwnerID() (id uuid.UUID, exists bool) {
 // OwnerIDs returns the "owner" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // OwnerID instead. It exists only for internal usage by the builders.
-func (m *LineItemMutation) OwnerIDs() (ids []uuid.UUID) {
+func (m *LineItemMutation) OwnerIDs() (ids []string) {
 	if id := m.owner; id != nil {
 		ids = append(ids, *id)
 	}

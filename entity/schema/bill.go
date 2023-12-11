@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // Bill holds the schema definition for the Bill entity.
@@ -17,8 +16,7 @@ type Bill struct {
 // Fields of the Bill.
 func (Bill) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", uuid.UUID{}).
-			Default(uuid.New).
+		field.String("id").
 			Unique().
 			Immutable(),
 		field.Enum("currency").

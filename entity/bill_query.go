@@ -14,7 +14,6 @@ import (
 	"github.com/dsha256/feesapi/entity/bill"
 	"github.com/dsha256/feesapi/entity/lineitem"
 	"github.com/dsha256/feesapi/entity/predicate"
-	"github.com/google/uuid"
 )
 
 // BillQuery is the builder for querying Bill entities.
@@ -107,8 +106,8 @@ func (bq *BillQuery) FirstX(ctx context.Context) *Bill {
 
 // FirstID returns the first Bill ID from the query.
 // Returns a *NotFoundError when no Bill ID was found.
-func (bq *BillQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (bq *BillQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = bq.Limit(1).IDs(setContextOp(ctx, bq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -120,7 +119,7 @@ func (bq *BillQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (bq *BillQuery) FirstIDX(ctx context.Context) uuid.UUID {
+func (bq *BillQuery) FirstIDX(ctx context.Context) string {
 	id, err := bq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -158,8 +157,8 @@ func (bq *BillQuery) OnlyX(ctx context.Context) *Bill {
 // OnlyID is like Only, but returns the only Bill ID in the query.
 // Returns a *NotSingularError when more than one Bill ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (bq *BillQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (bq *BillQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = bq.Limit(2).IDs(setContextOp(ctx, bq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -175,7 +174,7 @@ func (bq *BillQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (bq *BillQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+func (bq *BillQuery) OnlyIDX(ctx context.Context) string {
 	id, err := bq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -203,7 +202,7 @@ func (bq *BillQuery) AllX(ctx context.Context) []*Bill {
 }
 
 // IDs executes the query and returns a list of Bill IDs.
-func (bq *BillQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+func (bq *BillQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if bq.ctx.Unique == nil && bq.path != nil {
 		bq.Unique(true)
 	}
@@ -215,7 +214,7 @@ func (bq *BillQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (bq *BillQuery) IDsX(ctx context.Context) []uuid.UUID {
+func (bq *BillQuery) IDsX(ctx context.Context) []string {
 	ids, err := bq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -405,7 +404,7 @@ func (bq *BillQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bill, e
 
 func (bq *BillQuery) loadLineItems(ctx context.Context, query *LineItemQuery, nodes []*Bill, init func(*Bill), assign func(*Bill, *LineItem)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*Bill)
+	nodeids := make(map[string]*Bill)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -445,7 +444,7 @@ func (bq *BillQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (bq *BillQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(bill.Table, bill.Columns, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewQuerySpec(bill.Table, bill.Columns, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString))
 	_spec.From = bq.sql
 	if unique := bq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

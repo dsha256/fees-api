@@ -10,14 +10,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dsha256/feesapi/entity/bill"
-	"github.com/google/uuid"
 )
 
 // Bill is the model entity for the Bill schema.
 type Bill struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID uuid.UUID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// Currency holds the value of the "currency" field.
 	Currency bill.Currency `json:"currency,omitempty"`
 	// Total holds the value of the "total" field.
@@ -61,12 +60,10 @@ func (*Bill) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case bill.FieldTotal:
 			values[i] = new(sql.NullInt64)
-		case bill.FieldCurrency:
+		case bill.FieldID, bill.FieldCurrency:
 			values[i] = new(sql.NullString)
 		case bill.FieldClosedAt, bill.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
-		case bill.FieldID:
-			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -83,10 +80,10 @@ func (b *Bill) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case bill.FieldID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value != nil {
-				b.ID = *value
+			} else if value.Valid {
+				b.ID = value.String
 			}
 		case bill.FieldCurrency:
 			if value, ok := values[i].(*sql.NullString); !ok {

@@ -30,7 +30,7 @@ type LineItem struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the LineItemQuery when eager-loading is set.
 	Edges           LineItemEdges `json:"edges"`
-	bill_line_items *uuid.UUID
+	bill_line_items *string
 	selectValues    sql.SelectValues
 }
 
@@ -70,7 +70,7 @@ func (*LineItem) scanValues(columns []string) ([]any, error) {
 		case lineitem.FieldID:
 			values[i] = new(uuid.UUID)
 		case lineitem.ForeignKeys[0]: // bill_line_items
-			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -117,11 +117,11 @@ func (li *LineItem) assignValues(columns []string, values []any) error {
 				li.AddedAt = value.Time
 			}
 		case lineitem.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullScanner); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field bill_line_items", values[i])
 			} else if value.Valid {
-				li.bill_line_items = new(uuid.UUID)
-				*li.bill_line_items = *value.S.(*uuid.UUID)
+				li.bill_line_items = new(string)
+				*li.bill_line_items = value.String
 			}
 		default:
 			li.selectValues.Set(columns[i], values[i])

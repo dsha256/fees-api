@@ -33,10 +33,6 @@ func init() {
 	billDescCreatedAt := billFields[5].Descriptor()
 	// bill.DefaultCreatedAt holds the default value on creation for the created_at field.
 	bill.DefaultCreatedAt = billDescCreatedAt.Default.(func() time.Time)
-	// billDescID is the schema descriptor for id field.
-	billDescID := billFields[0].Descriptor()
-	// bill.DefaultID holds the default value on creation for the id field.
-	bill.DefaultID = billDescID.Default.(func() uuid.UUID)
 	lineitemFields := schema.LineItem{}.Fields()
 	_ = lineitemFields
 	// lineitemDescName is the schema descriptor for name field.

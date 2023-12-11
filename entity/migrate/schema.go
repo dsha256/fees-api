@@ -10,7 +10,7 @@ import (
 var (
 	// BillsColumns holds the columns for the "bills" table.
 	BillsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "id", Type: field.TypeString, Unique: true},
 		{Name: "currency", Type: field.TypeEnum, Enums: []string{"USD"}, Default: "USD"},
 		{Name: "total", Type: field.TypeInt64, Default: 0},
 		{Name: "is_open", Type: field.TypeBool, Default: true},
@@ -30,7 +30,7 @@ var (
 		{Name: "price", Type: field.TypeInt64},
 		{Name: "quantity", Type: field.TypeInt64},
 		{Name: "added_at", Type: field.TypeTime},
-		{Name: "bill_line_items", Type: field.TypeUUID, Nullable: true},
+		{Name: "bill_line_items", Type: field.TypeString, Nullable: true},
 	}
 	// LineItemsTable holds the schema information for the "line_items" table.
 	LineItemsTable = &schema.Table{

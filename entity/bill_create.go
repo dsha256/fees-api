@@ -93,16 +93,8 @@ func (bc *BillCreate) SetNillableCreatedAt(t *time.Time) *BillCreate {
 }
 
 // SetID sets the "id" field.
-func (bc *BillCreate) SetID(u uuid.UUID) *BillCreate {
-	bc.mutation.SetID(u)
-	return bc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (bc *BillCreate) SetNillableID(u *uuid.UUID) *BillCreate {
-	if u != nil {
-		bc.SetID(*u)
-	}
+func (bc *BillCreate) SetID(s string) *BillCreate {
+	bc.mutation.SetID(s)
 	return bc
 }
 
@@ -176,10 +168,6 @@ func (bc *BillCreate) defaults() {
 		v := bill.DefaultCreatedAt()
 		bc.mutation.SetCreatedAt(v)
 	}
-	if _, ok := bc.mutation.ID(); !ok {
-		v := bill.DefaultID()
-		bc.mutation.SetID(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -219,10 +207,10 @@ func (bc *BillCreate) sqlSave(ctx context.Context) (*Bill, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
+		if id, ok := _spec.ID.Value.(string); ok {
+			_node.ID = id
+		} else {
+			return nil, fmt.Errorf("unexpected Bill.ID type: %T", _spec.ID.Value)
 		}
 	}
 	bc.mutation.id = &_node.ID
@@ -233,11 +221,11 @@ func (bc *BillCreate) sqlSave(ctx context.Context) (*Bill, error) {
 func (bc *BillCreate) createSpec() (*Bill, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Bill{config: bc.config}
-		_spec = sqlgraph.NewCreateSpec(bill.Table, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(bill.Table, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString))
 	)
 	if id, ok := bc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := bc.mutation.Currency(); ok {
 		_spec.SetField(bill.FieldCurrency, field.TypeEnum, value)

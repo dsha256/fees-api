@@ -8,52 +8,61 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dsha256/feesapi/entity/predicate"
-	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id uuid.UUID) predicate.Bill {
+func ID(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id uuid.UUID) predicate.Bill {
+func IDEQ(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id uuid.UUID) predicate.Bill {
+func IDNEQ(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...uuid.UUID) predicate.Bill {
+func IDIn(ids ...string) predicate.Bill {
 	return predicate.Bill(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...uuid.UUID) predicate.Bill {
+func IDNotIn(ids ...string) predicate.Bill {
 	return predicate.Bill(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id uuid.UUID) predicate.Bill {
+func IDGT(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id uuid.UUID) predicate.Bill {
+func IDGTE(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id uuid.UUID) predicate.Bill {
+func IDLT(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id uuid.UUID) predicate.Bill {
+func IDLTE(id string) predicate.Bill {
 	return predicate.Bill(sql.FieldLTE(FieldID, id))
+}
+
+// IDEqualFold applies the EqualFold predicate on the ID field.
+func IDEqualFold(id string) predicate.Bill {
+	return predicate.Bill(sql.FieldEqualFold(FieldID, id))
+}
+
+// IDContainsFold applies the ContainsFold predicate on the ID field.
+func IDContainsFold(id string) predicate.Bill {
+	return predicate.Bill(sql.FieldContainsFold(FieldID, id))
 }
 
 // Total applies equality check predicate on the "total" field. It's identical to TotalEQ.

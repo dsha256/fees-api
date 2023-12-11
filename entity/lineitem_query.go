@@ -410,8 +410,8 @@ func (liq *LineItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Li
 }
 
 func (liq *LineItemQuery) loadOwner(ctx context.Context, query *BillQuery, nodes []*LineItem, init func(*LineItem), assign func(*LineItem, *Bill)) error {
-	ids := make([]uuid.UUID, 0, len(nodes))
-	nodeids := make(map[uuid.UUID][]*LineItem)
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*LineItem)
 	for i := range nodes {
 		if nodes[i].bill_line_items == nil {
 			continue

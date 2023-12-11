@@ -14,7 +14,6 @@ import (
 	"github.com/dsha256/feesapi/entity/bill"
 	"github.com/dsha256/feesapi/entity/lineitem"
 	"github.com/dsha256/feesapi/entity/predicate"
-	"github.com/google/uuid"
 )
 
 // LineItemUpdate is the builder for updating LineItem entities.
@@ -101,13 +100,13 @@ func (liu *LineItemUpdate) SetNillableAddedAt(t *time.Time) *LineItemUpdate {
 }
 
 // SetOwnerID sets the "owner" edge to the Bill entity by ID.
-func (liu *LineItemUpdate) SetOwnerID(id uuid.UUID) *LineItemUpdate {
+func (liu *LineItemUpdate) SetOwnerID(id string) *LineItemUpdate {
 	liu.mutation.SetOwnerID(id)
 	return liu
 }
 
 // SetNillableOwnerID sets the "owner" edge to the Bill entity by ID if the given value is not nil.
-func (liu *LineItemUpdate) SetNillableOwnerID(id *uuid.UUID) *LineItemUpdate {
+func (liu *LineItemUpdate) SetNillableOwnerID(id *string) *LineItemUpdate {
 	if id != nil {
 		liu = liu.SetOwnerID(*id)
 	}
@@ -215,7 +214,7 @@ func (liu *LineItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{lineitem.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -228,7 +227,7 @@ func (liu *LineItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{lineitem.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -327,13 +326,13 @@ func (liuo *LineItemUpdateOne) SetNillableAddedAt(t *time.Time) *LineItemUpdateO
 }
 
 // SetOwnerID sets the "owner" edge to the Bill entity by ID.
-func (liuo *LineItemUpdateOne) SetOwnerID(id uuid.UUID) *LineItemUpdateOne {
+func (liuo *LineItemUpdateOne) SetOwnerID(id string) *LineItemUpdateOne {
 	liuo.mutation.SetOwnerID(id)
 	return liuo
 }
 
 // SetNillableOwnerID sets the "owner" edge to the Bill entity by ID if the given value is not nil.
-func (liuo *LineItemUpdateOne) SetNillableOwnerID(id *uuid.UUID) *LineItemUpdateOne {
+func (liuo *LineItemUpdateOne) SetNillableOwnerID(id *string) *LineItemUpdateOne {
 	if id != nil {
 		liuo = liuo.SetOwnerID(*id)
 	}
@@ -471,7 +470,7 @@ func (liuo *LineItemUpdateOne) sqlSave(ctx context.Context) (_node *LineItem, er
 			Columns: []string{lineitem.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -484,7 +483,7 @@ func (liuo *LineItemUpdateOne) sqlSave(ctx context.Context) (_node *LineItem, er
 			Columns: []string{lineitem.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

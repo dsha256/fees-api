@@ -189,7 +189,7 @@ func (bu *BillUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := bu.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(bill.Table, bill.Columns, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(bill.Table, bill.Columns, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString))
 	if ps := bu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -452,7 +452,7 @@ func (buo *BillUpdateOne) sqlSave(ctx context.Context) (_node *Bill, err error) 
 	if err := buo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(bill.Table, bill.Columns, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(bill.Table, bill.Columns, sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString))
 	id, ok := buo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`entity: missing "Bill.id" for update`)}

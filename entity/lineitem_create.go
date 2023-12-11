@@ -69,13 +69,13 @@ func (lic *LineItemCreate) SetNillableID(u *uuid.UUID) *LineItemCreate {
 }
 
 // SetOwnerID sets the "owner" edge to the Bill entity by ID.
-func (lic *LineItemCreate) SetOwnerID(id uuid.UUID) *LineItemCreate {
+func (lic *LineItemCreate) SetOwnerID(id string) *LineItemCreate {
 	lic.mutation.SetOwnerID(id)
 	return lic
 }
 
 // SetNillableOwnerID sets the "owner" edge to the Bill entity by ID if the given value is not nil.
-func (lic *LineItemCreate) SetNillableOwnerID(id *uuid.UUID) *LineItemCreate {
+func (lic *LineItemCreate) SetNillableOwnerID(id *string) *LineItemCreate {
 	if id != nil {
 		lic = lic.SetOwnerID(*id)
 	}
@@ -220,7 +220,7 @@ func (lic *LineItemCreate) createSpec() (*LineItem, *sqlgraph.CreateSpec) {
 			Columns: []string{lineitem.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(bill.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
